@@ -27,10 +27,11 @@ func (x *GoSNMP) walk(getRequestType PDUType, rootOid string, walkFn WalkFunc) e
 
 	// EXPERIMENTAL AppOpt 'c: do not check returned OIDs are increasing'
 	checkIncreasing := true
-	seenOids := map[string]bool{}
 	if x.AppOpts != nil {
 		if _, ok := x.AppOpts["c"]; ok {
-			checkIncreasing = false
+			if getRequestType == GetBulkRequest || getRequestType == GetNextRequest {
+				checkIncreasing = false
+			}
 		}
 	}
 
@@ -87,12 +88,6 @@ RequestLoop:
 			if checkIncreasing && pdu.Name == oid {
 				return fmt.Errorf("OID not increasing: %s", pdu.Name)
 			}
-			if !checkIncreasing {
-				if _, seen := seenOids[oid]; seen {
-					return fmt.Errorf("Ignoring increasing checks, but OID %s already seen - looping?", pdu.Name)
-				}
-				seenOids[oid] = true
-			}
 
 			// Report our pdu
 			if err := walkFn(pdu); err != nil {
@@ -101,10 +96,6 @@ RequestLoop:
 		}
 		// Save last oid for next request
 		oid = response.Variables[len(response.Variables)-1].Name
-		if !checkIncreasing {
-			// this oid will appear again, but that's expected
-			delete(seenOids, oid)
-		}
 
 	}
 	x.Logger.Printf("BulkWalk completed in %d requests", requests)
