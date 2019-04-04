@@ -25,6 +25,15 @@ func (x *GoSNMP) walk(getRequestType PDUType, rootOid string, walkFn WalkFunc) e
 		maxReps = defaultMaxRepetitions
 	}
 
+	// EXPERIMENTAL AppOpt 'c: do not check returned OIDs are increasing'
+	checkIncreasing := true
+	seenOids := map[string]bool{}
+	if x.AppOpts != nil {
+		if _, ok := x.AppOpts["c"]; ok {
+			checkIncreasing = false
+		}
+	}
+
 RequestLoop:
 	for {
 
@@ -56,34 +65,47 @@ RequestLoop:
 			break RequestLoop
 		}
 
-		for k, v := range response.Variables {
-			if v.Type == EndOfMibView || v.Type == NoSuchObject || v.Type == NoSuchInstance {
-				x.Logger.Printf("BulkWalk terminated with type 0x%x", v.Type)
+		for i, pdu := range response.Variables {
+			if pdu.Type == EndOfMibView || pdu.Type == NoSuchObject || pdu.Type == NoSuchInstance {
+				x.Logger.Printf("BulkWalk terminated with type 0x%x", pdu.Type)
 				break RequestLoop
 			}
-			if !strings.HasPrefix(v.Name, rootOid+".") {
+			if !strings.HasPrefix(pdu.Name, rootOid+".") {
 				// Not in the requested root range.
 				// if this is the first request, and the first variable in that request
 				// and this condition is triggered - the first result is out of range
 				// need to perform a regular get request
 				// this request has been too narrowly defined to be found with a getNext
 				// Issue #78 #93
-				if requests == 1 && k == 0 {
+				if requests == 1 && i == 0 {
 					getRequestType = GetRequest
 					continue RequestLoop
 				}
 				break RequestLoop
 			}
-			if v.Name == oid {
-				return fmt.Errorf("OID not increasing: %s", v.Name)
+
+			if checkIncreasing && pdu.Name == oid {
+				return fmt.Errorf("OID not increasing: %s", pdu.Name)
 			}
+			if !checkIncreasing {
+				if _, seen := seenOids[oid]; seen {
+					return fmt.Errorf("Ignoring increasing checks, but OID %s already seen - looping?", pdu.Name)
+				}
+				seenOids[oid] = true
+			}
+
 			// Report our pdu
-			if err := walkFn(v); err != nil {
+			if err := walkFn(pdu); err != nil {
 				return err
 			}
 		}
 		// Save last oid for next request
 		oid = response.Variables[len(response.Variables)-1].Name
+		if !checkIncreasing {
+			// this oid will appear again, but that's expected
+			delete(seenOids, oid)
+		}
+
 	}
 	x.Logger.Printf("BulkWalk completed in %d requests", requests)
 	return nil

@@ -82,6 +82,12 @@ type GoSNMP struct {
 	// (default: 0 as per RFC 1905)
 	NonRepeaters int
 
+	// netsnmp has '-C APPOPTS - set various application specific behaviours'
+	// - 'c: do not check returned OIDs are increasing' - set AppOpts = map[string]string{"c":true} ->
+	//   EXPERIMENTAL April/2019 please test and report results (good or bad) - https://github.com/soniah/gosnmp/issues/132
+	// - 'p,i,I,t,E' -> pull requests welcome
+	AppOpts map[string]interface{}
+
 	// Internal - used to sync requests to responses
 	requestID uint32
 	random    *rand.Rand
