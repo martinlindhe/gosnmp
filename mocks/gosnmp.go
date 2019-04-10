@@ -6,6 +6,7 @@ package gosnmp
 
 import (
 	x "."
+	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	time "time"
@@ -615,4 +616,53 @@ func (m *MockHandler) SetContextName(contextName string) {
 // SetContextName indicates an expected call of SetContextName
 func (mr *MockHandlerMockRecorder) SetContextName(contextName interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetContextName", reflect.TypeOf((*MockHandler)(nil).SetContextName), contextName)
+}
+
+// DialWithCtx mocks base method
+func (m *MockHandler) DialWithCtx(ctx context.Context) error {
+	ret := m.ctrl.Call(m, "DialWithCtx", ctx)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DialWithCtx indicates an expected call of DialWithCtx
+func (mr *MockHandlerMockRecorder) DialWithCtx(ctx interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DialWithCtx", reflect.TypeOf((*MockHandler)(nil).DialWithCtx), ctx)
+}
+
+// GetWithCtx mocks base method
+func (m *MockHandler) GetWithCtx(ctx context.Context, oids []string) (*x.SnmpPacket, error) {
+	ret := m.ctrl.Call(m, "GetWithCtx", ctx, oids)
+	ret0, _ := ret[0].(*x.SnmpPacket)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetWithCtx indicates an expected call of GetWithCtx
+func (mr *MockHandlerMockRecorder) GetWithCtx(ctx, oids interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWithCtx", reflect.TypeOf((*MockHandler)(nil).GetWithCtx), ctx, oids)
+}
+
+// BulkWalkWithCtx mocks base method
+func (m *MockHandler) BulkWalkWithCtx(ctx context.Context, rootOid string, walkFn x.WalkFunc) error {
+	ret := m.ctrl.Call(m, "BulkWalkWithCtx", ctx, rootOid, walkFn)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// BulkWalkWithCtx indicates an expected call of BulkWalkWithCtx
+func (mr *MockHandlerMockRecorder) BulkWalkWithCtx(ctx, rootOid, walkFn interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BulkWalkWithCtx", reflect.TypeOf((*MockHandler)(nil).BulkWalkWithCtx), ctx, rootOid, walkFn)
+}
+
+// WalkWithCtx mocks base method
+func (m *MockHandler) WalkWithCtx(ctx context.Context, rootOid string, walkFn x.WalkFunc) error {
+	ret := m.ctrl.Call(m, "WalkWithCtx", ctx, rootOid, walkFn)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// WalkWithCtx indicates an expected call of WalkWithCtx
+func (mr *MockHandlerMockRecorder) WalkWithCtx(ctx, rootOid, walkFn interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WalkWithCtx", reflect.TypeOf((*MockHandler)(nil).WalkWithCtx), ctx, rootOid, walkFn)
 }

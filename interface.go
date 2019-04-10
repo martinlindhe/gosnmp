@@ -9,6 +9,7 @@
 package gosnmp
 
 import (
+	"context"
 	"time"
 )
 
@@ -200,6 +201,20 @@ type Handler interface {
 
 	// SetContextName sets the ContextName
 	SetContextName(contextName string)
+
+	// ------------ context.go ------------
+
+	// DialWithCtx connects through udp with a context
+	DialWithCtx(ctx context.Context) error
+
+	// GetWithCtx calls Get with a context
+	GetWithCtx(ctx context.Context, oids []string) (result *SnmpPacket, err error)
+
+	// BulkWalkWithCtx calls BulkWalk with a context
+	BulkWalkWithCtx(ctx context.Context, rootOid string, walkFn WalkFunc) error
+
+	// WalkWithCtx calls Walk with a context
+	WalkWithCtx(ctx context.Context, rootOid string, walkFn WalkFunc) error
 }
 
 // snmpHandler is a wrapper around gosnmp
