@@ -83,17 +83,17 @@ func (mr *MockHandlerMockRecorder) Get(oids interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockHandler)(nil).Get), oids)
 }
 
-// GetBulk mocks base method
-func (m *MockHandler) GetBulk(oids []string, nonRepeaters, maxRepetitions uint8) (*x.SnmpPacket, error) {
-	ret := m.ctrl.Call(m, "GetBulk", oids, nonRepeaters, maxRepetitions)
+// Set mocks base method
+func (m *MockHandler) Set(pdus []x.SnmpPDU) (*x.SnmpPacket, error) {
+	ret := m.ctrl.Call(m, "Set", pdus)
 	ret0, _ := ret[0].(*x.SnmpPacket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetBulk indicates an expected call of GetBulk
-func (mr *MockHandlerMockRecorder) GetBulk(oids, nonRepeaters, maxRepetitions interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBulk", reflect.TypeOf((*MockHandler)(nil).GetBulk), oids, nonRepeaters, maxRepetitions)
+// Set indicates an expected call of Set
+func (mr *MockHandlerMockRecorder) Set(pdus interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockHandler)(nil).Set), pdus)
 }
 
 // GetNext mocks base method
@@ -109,29 +109,63 @@ func (mr *MockHandlerMockRecorder) GetNext(oids interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNext", reflect.TypeOf((*MockHandler)(nil).GetNext), oids)
 }
 
-// Walk mocks base method
-func (m *MockHandler) Walk(rootOid string, walkFn x.WalkFunc) error {
-	ret := m.ctrl.Call(m, "Walk", rootOid, walkFn)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Walk indicates an expected call of Walk
-func (mr *MockHandlerMockRecorder) Walk(rootOid, walkFn interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Walk", reflect.TypeOf((*MockHandler)(nil).Walk), rootOid, walkFn)
-}
-
-// WalkAll mocks base method
-func (m *MockHandler) WalkAll(rootOid string) ([]x.SnmpPDU, error) {
-	ret := m.ctrl.Call(m, "WalkAll", rootOid)
-	ret0, _ := ret[0].([]x.SnmpPDU)
+// GetBulk mocks base method
+func (m *MockHandler) GetBulk(oids []string, nonRepeaters, maxRepetitions uint8) (*x.SnmpPacket, error) {
+	ret := m.ctrl.Call(m, "GetBulk", oids, nonRepeaters, maxRepetitions)
+	ret0, _ := ret[0].(*x.SnmpPacket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// WalkAll indicates an expected call of WalkAll
-func (mr *MockHandlerMockRecorder) WalkAll(rootOid interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WalkAll", reflect.TypeOf((*MockHandler)(nil).WalkAll), rootOid)
+// GetBulk indicates an expected call of GetBulk
+func (mr *MockHandlerMockRecorder) GetBulk(oids, nonRepeaters, maxRepetitions interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBulk", reflect.TypeOf((*MockHandler)(nil).GetBulk), oids, nonRepeaters, maxRepetitions)
+}
+
+// SnmpEncodePacket mocks base method
+func (m *MockHandler) SnmpEncodePacket(pdutype x.PDUType, pdus []x.SnmpPDU, nonRepeaters, maxRepetitions uint8) ([]byte, error) {
+	ret := m.ctrl.Call(m, "SnmpEncodePacket", pdutype, pdus, nonRepeaters, maxRepetitions)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SnmpEncodePacket indicates an expected call of SnmpEncodePacket
+func (mr *MockHandlerMockRecorder) SnmpEncodePacket(pdutype, pdus, nonRepeaters, maxRepetitions interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SnmpEncodePacket", reflect.TypeOf((*MockHandler)(nil).SnmpEncodePacket), pdutype, pdus, nonRepeaters, maxRepetitions)
+}
+
+// SnmpDecodePacket mocks base method
+func (m *MockHandler) SnmpDecodePacket(resp []byte) (*x.SnmpPacket, error) {
+	ret := m.ctrl.Call(m, "SnmpDecodePacket", resp)
+	ret0, _ := ret[0].(*x.SnmpPacket)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SnmpDecodePacket indicates an expected call of SnmpDecodePacket
+func (mr *MockHandlerMockRecorder) SnmpDecodePacket(resp interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SnmpDecodePacket", reflect.TypeOf((*MockHandler)(nil).SnmpDecodePacket), resp)
+}
+
+// SetRequestID mocks base method
+func (m *MockHandler) SetRequestID(reqID uint32) {
+	m.ctrl.Call(m, "SetRequestID", reqID)
+}
+
+// SetRequestID indicates an expected call of SetRequestID
+func (mr *MockHandlerMockRecorder) SetRequestID(reqID interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetRequestID", reflect.TypeOf((*MockHandler)(nil).SetRequestID), reqID)
+}
+
+// SetMsgID mocks base method
+func (m *MockHandler) SetMsgID(msgID uint32) {
+	m.ctrl.Call(m, "SetMsgID", msgID)
+}
+
+// SetMsgID indicates an expected call of SetMsgID
+func (mr *MockHandlerMockRecorder) SetMsgID(msgID interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetMsgID", reflect.TypeOf((*MockHandler)(nil).SetMsgID), msgID)
 }
 
 // BulkWalk mocks base method
@@ -159,6 +193,31 @@ func (mr *MockHandlerMockRecorder) BulkWalkAll(rootOid interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BulkWalkAll", reflect.TypeOf((*MockHandler)(nil).BulkWalkAll), rootOid)
 }
 
+// Walk mocks base method
+func (m *MockHandler) Walk(rootOid string, walkFn x.WalkFunc) error {
+	ret := m.ctrl.Call(m, "Walk", rootOid, walkFn)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Walk indicates an expected call of Walk
+func (mr *MockHandlerMockRecorder) Walk(rootOid, walkFn interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Walk", reflect.TypeOf((*MockHandler)(nil).Walk), rootOid, walkFn)
+}
+
+// WalkAll mocks base method
+func (m *MockHandler) WalkAll(rootOid string) ([]x.SnmpPDU, error) {
+	ret := m.ctrl.Call(m, "WalkAll", rootOid)
+	ret0, _ := ret[0].([]x.SnmpPDU)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// WalkAll indicates an expected call of WalkAll
+func (mr *MockHandlerMockRecorder) WalkAll(rootOid interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WalkAll", reflect.TypeOf((*MockHandler)(nil).WalkAll), rootOid)
+}
+
 // SendTrap mocks base method
 func (m *MockHandler) SendTrap(trap x.SnmpTrap) (*x.SnmpPacket, error) {
 	ret := m.ctrl.Call(m, "SendTrap", trap)
@@ -182,19 +241,6 @@ func (m *MockHandler) UnmarshalTrap(trap []byte) *x.SnmpPacket {
 // UnmarshalTrap indicates an expected call of UnmarshalTrap
 func (mr *MockHandlerMockRecorder) UnmarshalTrap(trap interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnmarshalTrap", reflect.TypeOf((*MockHandler)(nil).UnmarshalTrap), trap)
-}
-
-// Set mocks base method
-func (m *MockHandler) Set(pdus []x.SnmpPDU) (*x.SnmpPacket, error) {
-	ret := m.ctrl.Call(m, "Set", pdus)
-	ret0, _ := ret[0].(*x.SnmpPacket)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Set indicates an expected call of Set
-func (mr *MockHandlerMockRecorder) Set(pdus interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockHandler)(nil).Set), pdus)
 }
 
 // Check mocks base method
