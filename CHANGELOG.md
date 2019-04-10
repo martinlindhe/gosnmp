@@ -1,3 +1,9 @@
+## v1.21.0
+
+* add wrappers for using contexts
+* mock generation was failing with go modules - fix
+* move mocks to mock/ directory
+
 ## v1.20.0
 
 * convert all tags to correct semantic versioning, and remove old tags
