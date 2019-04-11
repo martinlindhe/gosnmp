@@ -84,11 +84,8 @@ type GoSNMP struct {
 
 	// netsnmp has '-C APPOPTS - set various application specific behaviours'
 	//
-	// - 'c: do not check returned OIDs are increasing' - set AppOpts = map[string]interface{"c":true} and use
+	// - 'c: do not check returned OIDs are increasing' - use AppOpts = map[string]interface{"c":true} with
 	//   Walk() or BulkWalk(). The library user needs to implement their own policy for terminating walks.
-	//
-	//   EXPERIMENTAL April/2019 please test and report results (good or bad) - https://github.com/soniah/gosnmp/issues/132
-	//
 	// - 'p,i,I,t,E' -> pull requests welcome
 	AppOpts map[string]interface{}
 
