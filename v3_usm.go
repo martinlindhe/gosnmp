@@ -231,9 +231,7 @@ func cachedPasswordToKey(hash hash.Hash, hashType string, password string) []byt
 
 // MD5 HMAC key calculation algorithm
 func md5HMAC(password string, engineID string) []byte {
-	var compressed []byte
-
-	compressed = cachedPasswordToKey(md5.New(), "MD5", password)
+	compressed := cachedPasswordToKey(md5.New(), "MD5", password)
 
 	local := md5.New()
 	local.Write(compressed)
@@ -245,9 +243,7 @@ func md5HMAC(password string, engineID string) []byte {
 
 // SHA HMAC key calculation algorithm
 func shaHMAC(password string, engineID string) []byte {
-	var hashed []byte
-
-	hashed = cachedPasswordToKey(sha1.New(), "SHA1", password)
+	hashed := cachedPasswordToKey(sha1.New(), "SHA1", password)
 
 	local := sha1.New()
 	local.Write(hashed)
@@ -361,8 +357,8 @@ func usmFindAuthParamStart(packet []byte) (uint32, error) {
 }
 
 func (sp *UsmSecurityParameters) authenticate(packet []byte) error {
-
 	var extkey [64]byte
+	var err error
 
 	copy(extkey[:], sp.SecretKey)
 
@@ -384,11 +380,27 @@ func (sp *UsmSecurityParameters) authenticate(packet []byte) error {
 		h2 = sha1.New()
 	}
 
-	h.Write(k1[:])
-	h.Write(packet)
+	_, err = h.Write(k1[:])
+	if err != nil {
+		return err
+	}
+
+	_, err = h.Write(packet)
+	if err != nil {
+		return err
+	}
+
 	d1 := h.Sum(nil)
-	h2.Write(k2[:])
-	h2.Write(d1)
+	_, err = h2.Write(k2[:])
+	if err != nil {
+		return err
+	}
+
+	_, err = h2.Write(d1)
+	if err != nil {
+		return err
+	}
+
 	authParamStart, err := usmFindAuthParamStart(packet)
 	if err != nil {
 		return err
@@ -401,7 +413,6 @@ func (sp *UsmSecurityParameters) authenticate(packet []byte) error {
 
 // determine whether a message is authentic
 func (sp *UsmSecurityParameters) isAuthentic(packetBytes []byte, packet *SnmpPacket) (bool, error) {
-
 	var packetSecParams *UsmSecurityParameters
 	var err error
 
@@ -432,11 +443,27 @@ func (sp *UsmSecurityParameters) isAuthentic(packetBytes []byte, packet *SnmpPac
 		h2 = sha1.New()
 	}
 
-	h.Write(k1[:])
-	h.Write(packetBytes)
+	_, err = h.Write(k1[:])
+	if err != nil {
+		return false, err
+	}
+
+	_, err = h.Write(packetBytes)
+	if err != nil {
+		return false, err
+	}
+
 	d1 := h.Sum(nil)
-	h2.Write(k2[:])
-	h2.Write(d1)
+
+	_, err = h2.Write(k2[:])
+	if err != nil {
+		return false, err
+	}
+
+	_, err = h2.Write(d1)
+	if err != nil {
+		return false, err
+	}
 
 	result := h2.Sum(nil)[:12]
 	for k, v := range []byte(packetSecParams.AuthenticationParameters) {
