@@ -231,9 +231,7 @@ func cachedPasswordToKey(hash hash.Hash, hashType string, password string) []byt
 
 // MD5 HMAC key calculation algorithm
 func md5HMAC(password string, engineID string) []byte {
-	var compressed []byte
-
-	compressed = cachedPasswordToKey(md5.New(), "MD5", password)
+	compressed := cachedPasswordToKey(md5.New(), "MD5", password)
 
 	local := md5.New()
 	local.Write(compressed)
@@ -245,9 +243,7 @@ func md5HMAC(password string, engineID string) []byte {
 
 // SHA HMAC key calculation algorithm
 func shaHMAC(password string, engineID string) []byte {
-	var hashed []byte
-
-	hashed = cachedPasswordToKey(sha1.New(), "SHA1", password)
+	hashed := cachedPasswordToKey(sha1.New(), "SHA1", password)
 
 	local := sha1.New()
 	local.Write(hashed)
