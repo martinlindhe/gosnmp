@@ -361,8 +361,8 @@ func usmFindAuthParamStart(packet []byte) (uint32, error) {
 }
 
 func (sp *UsmSecurityParameters) authenticate(packet []byte) error {
-
 	var extkey [64]byte
+	var err error
 
 	copy(extkey[:], sp.SecretKey)
 
@@ -384,11 +384,27 @@ func (sp *UsmSecurityParameters) authenticate(packet []byte) error {
 		h2 = sha1.New()
 	}
 
-	h.Write(k1[:])
-	h.Write(packet)
+	_, err = h.Write(k1[:])
+	if err != nil {
+		return err
+	}
+
+	_, err = h.Write(packet)
+	if err != nil {
+		return err
+	}
+
 	d1 := h.Sum(nil)
-	h2.Write(k2[:])
-	h2.Write(d1)
+	_, err = h2.Write(k2[:])
+	if err != nil {
+		return err
+	}
+
+	_, err = h2.Write(d1)
+	if err != nil {
+		return err
+	}
+
 	authParamStart, err := usmFindAuthParamStart(packet)
 	if err != nil {
 		return err
