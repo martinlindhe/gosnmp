@@ -187,7 +187,7 @@ func (x *GoSNMP) sendOneRequest(packetOut *SnmpPacket,
 		}
 
 		// all sends wait for the return packet, except for SNMPv2Trap
-		if ! wait {
+		if !wait {
 			return &SnmpPacket{}, nil
 		}
 

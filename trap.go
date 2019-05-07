@@ -135,7 +135,7 @@ func (t *TrapListener) Listen(addr string) error {
 	if t.Params == nil {
 		t.Params = Default
 	}
-	
+
 	err := t.Params.validateParameters()
 	if err != nil {
 		return err
