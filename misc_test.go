@@ -8,7 +8,11 @@ package gosnmp
 
 import (
 	"bytes"
+	"encoding/hex"
+	"errors"
+	"fmt"
 	"reflect"
+	"strconv"
 	"testing"
 )
 
@@ -214,7 +218,6 @@ func dumpBytes2(desc string, bb []byte, cursor int) string {
 	}
 	return result
 }
-
 
 func checkByteEquality2(a, b []byte) bool {
 
